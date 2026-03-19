@@ -6,7 +6,7 @@ print("\n==============================")
 print(" LOADING DATASET")
 print("==============================\n")
 
-df = pd.read_csv("datasets/final-usables/pluto_with_rent_stabilization_flag.csv", low_memory=False)
+df = pd.read_csv("Desktop/NYC-Rent-Project/datasets/final-usables/pluto_with_rent_stabilization_flag.csv", low_memory=False)
 
 print("Rows:", df.shape[0])
 print("Columns:", df.shape[1])
