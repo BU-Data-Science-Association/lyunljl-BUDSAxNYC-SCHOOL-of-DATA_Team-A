@@ -1,3 +1,6 @@
+let geojson;
+let highlightedLayer = null;
+
 // Initialize map
 var map = L.map('map', {
     minZoom: 9.5,
@@ -13,13 +16,18 @@ map.setMaxBounds(bounds);
 map.on('drag', function() {
     map.panInsideBounds(bounds, { animate: false });
 });
-
+/*
+map.on('zoomstart', function() {
+    if (highlightedLayer) {
+        geojson.resetStyle(highlightedLayer);
+        highlightedLayer = null;
+    }
+});
+*/
 // Add tile layer
 L.tileLayer('https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=PomQwQ81LXSQaSTsapyk', {
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
 }).addTo(map);
-
-let geojson;
 
 // ── Field definitions ──────────────────────────────────────────────────────────
 // Each field has: label, color ramp (low→high), breakpoints, and a formatter
@@ -92,11 +100,24 @@ function style(feature) {
 
 function highlightFeature(e) {
     const layer = e.target;
-    layer.setStyle({weight: 3, color: '#666', fillOpacity: 0.9});
+
+    if (highlightedLayer && highlightedLayer !== layer) {
+        geojson.resetStyle(highlightedLayer);
+    }
+
+    layer.setStyle({
+        weight: 3,
+        color: '#666',
+        fillOpacity: 0.9
+    });
+
+    layer.bringToFront();
+    highlightedLayer = layer;
 }
 
 function resetHighlight(e) {
     geojson.resetStyle(e.target);
+    highlightedLayer = null;
 }
 
 // ── Tooltip ────────────────────────────────────────────────────────────────────
