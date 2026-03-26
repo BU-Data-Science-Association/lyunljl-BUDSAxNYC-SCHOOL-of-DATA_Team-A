@@ -1,1 +1,5 @@
 .DS_Store
+.venv
+datasets/tl_2023_us_zcta520
+datasets/tl_2025_us_county
+datasets/geojson-raw/
