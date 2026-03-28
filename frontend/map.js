@@ -30,43 +30,43 @@ L.tileLayer('https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=Pom
 const fieldConfig = {
     median_gross_rent: {
         label: "Median Gross Rent",
-        colors: ['#FFF5EB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
+        colors: ['#FDDDBB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
         breaks: [2000, 2500, 3000, 3500, 4000],
         format: v => v != null ? `$${Number(v).toLocaleString()}` : 'N/A'
     },
     median_household_income: {
         label: "Median Household Income",
-        colors: ['#FFF5EB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
+        colors: ['#FDDDBB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
         breaks: [40000, 60000, 80000, 100000, 130000],
         format: v => v != null ? `$${Number(v).toLocaleString()}` : 'N/A'
     },
     total_population: {
         label: "Total Population",
-        colors: ['#FFF5EB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
+        colors: ['#FDDDBB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
         breaks: [5000, 10000, 20000, 35000, 50000],
         format: v => v != null ? Number(v).toLocaleString() : 'N/A'
     },
     housing_units_total: {
         label: "Total Housing Units",
-        colors: ['#FFF5EB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
+        colors: ['#FDDDBB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
         breaks: [2000, 4000, 7000, 11000, 16000],
         format: v => v != null ? Number(v).toLocaleString() : 'N/A'
     },
     renter_occupied_units: {
         label: "Renter Occupied Units",
-        colors: ['#FFF5EB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
+        colors: ['#FDDDBB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
         breaks: [500, 1500, 3000, 5000, 8000],
         format: v => v != null ? Number(v).toLocaleString() : 'N/A'
     },
     owner_occupied_units: {
         label: "Owner Occupied Units",
-        colors: ['#FFF5EB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
+        colors: ['#FDDDBB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
         breaks: [500, 1500, 3000, 5000, 8000],
         format: v => v != null ? Number(v).toLocaleString() : 'N/A'
     },
     rent_50pct_or_more_income: {
         label: "Rent ≥ 50% Income",
-        colors: ['#FFF5EB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
+        colors: ['#FDDDBB', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'],
         breaks: [100, 300, 600, 1000, 1500],
         format: v => v != null ? Number(v).toLocaleString() : 'N/A'
     }
