@@ -17,14 +17,7 @@ map.fitBounds(bounds);
 map.on('drag', function() {
     map.panInsideBounds(bounds, { animate: false });
 });
-/*
-map.on('zoomstart', function() {
-    if (highlightedLayer) {
-        geojson.resetStyle(highlightedLayer);
-        highlightedLayer = null;
-    }
-});
-*/
+
 // Add tile layer
 L.tileLayer('https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=PomQwQ81LXSQaSTsapyk', {
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
@@ -288,9 +281,48 @@ function loadGeoJSON(url) {
 const toolbar = document.getElementById("toolbar");
 
 // Divider
+const divider4 = document.createElement("div");
+divider4.className = "toolbar-divider";
+toolbar.appendChild(divider4);
+
+// ── Search Section ──
+const searchSection = document.createElement("div");
+searchSection.className = "toolbar-section";
+searchSection.innerHTML = `<div class="toolbar-section-title">Search by ID</div>
+<input type="text" id="searchInput" placeholder="Enter ID" style="width: 100%; padding: 4px;">`;
+toolbar.appendChild(searchSection);
+
+// Divider
 const divider0 = document.createElement("div");
 divider0.className = "toolbar-divider";
 toolbar.appendChild(divider0);
+
+// ── Region Selector Section ──
+const geojsonSection = document.createElement("div");
+geojsonSection.className = "toolbar-section";
+geojsonSection.innerHTML = `<div class="toolbar-section-title">Select Region</div>`;
+
+const geojsonFiles = {
+    'Boroughs': '../datasets/final-usables/merged_nyc_county.geojson',
+    'ZIP Codes': '../datasets/final-usables/merged_nyc_zcta.geojson'
+};
+
+Object.entries(geojsonFiles).forEach(([labelText, url], idx) => {
+    const label = document.createElement("label");
+    label.className = "radio-label";
+    label.innerHTML = `
+        <input type="radio" name="geojsonFile" value="${url}" ${idx === 0 ? 'checked' : ''}>
+        ${labelText}
+    `;
+    geojsonSection.appendChild(label);
+});
+
+toolbar.appendChild(geojsonSection);
+
+// Divider
+const divider2 = document.createElement("div");
+divider2.className = "toolbar-divider";
+toolbar.appendChild(divider2);
 
 // ── Color Map By Section ──
 const colorBySection = document.createElement("div");
@@ -334,33 +366,6 @@ Object.entries(fieldConfig).forEach(([key, cfg]) => {
 });
 
 toolbar.appendChild(tooltipSection);
-
-// Divider
-const divider2 = document.createElement("div");
-divider2.className = "toolbar-divider";
-toolbar.appendChild(divider2);
-
-// ── Region Selector Section ──
-const geojsonSection = document.createElement("div");
-geojsonSection.className = "toolbar-section";
-geojsonSection.innerHTML = `<div class="toolbar-section-title">Select Region</div>`;
-
-const geojsonFiles = {
-    'Boroughs': '../datasets/final-usables/merged_nyc_county.geojson',
-    'ZIP Codes': '../datasets/final-usables/merged_nyc_zcta.geojson'
-};
-
-Object.entries(geojsonFiles).forEach(([labelText, url], idx) => {
-    const label = document.createElement("label");
-    label.className = "radio-label";
-    label.innerHTML = `
-        <input type="radio" name="geojsonFile" value="${url}" ${idx === 0 ? 'checked' : ''}>
-        ${labelText}
-    `;
-    geojsonSection.appendChild(label);
-});
-
-toolbar.appendChild(geojsonSection);
 
 // Divider
 const divider3 = document.createElement("div");
@@ -468,4 +473,45 @@ exportGeoJSONBtn.addEventListener("click", () => {
     link.click();
 });
 
+// ── Search functionality ──
+const searchInput = document.getElementById('searchInput');
+
+if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+        const searchId = e.target.value.trim();
+
+        if (highlightedLayer) {
+            geojson.resetStyle(highlightedLayer);
+            highlightedLayer = null;
+        }
+
+        if (!geojson || !searchId) return;
+
+        geojson.eachLayer(layer => {
+            const id = layer.feature.properties.GEOID20 
+                || layer.feature.properties.BoroName 
+                || "";
+
+            if (id.toString().toLowerCase() === searchId.toLowerCase()) {
+                layer.setStyle({
+                    weight: 3,
+                    color: '#ff7800',
+                    fillOpacity: 0.9
+                });
+                highlightedLayer = layer;
+                map.fitBounds(layer.getBounds());
+            }
+        });
+    });
+}
+
 loadGeoJSON('../datasets/final-usables/merged_nyc_county.geojson');
+
+let scrollTimeout;
+
+toolbar.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        toolbar.scrollTop = 0;  // scroll back to top
+    }, 1000); // 1 second after user stops scrolling
+});
